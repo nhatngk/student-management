@@ -40,6 +40,7 @@ const studentController = {
             const studentInfo = req.body;
 
             const check = await Students.findOne({ studentCode: studentInfo.studentCode });
+
             if (check) {
                 next({
                     status: 400,
@@ -47,12 +48,12 @@ const studentController = {
                 })
             }
 
-            // const student = await Students.create({ ...studentInfo });
+            const student = await Students.create({ ...studentInfo });
 
-            // return res.status(201).json({
-            //     message:"Create successfully!",
-            //     student
-            // });
+            return res.status(201).json({
+                message:"Create successfully!",
+                student
+            });
         } catch (error) {
             next({
                 status: 500,
