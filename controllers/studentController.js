@@ -3,19 +3,20 @@ const Students = require("../models/student")
 const studentController = {
     getByStudentCode: async (req, res, next) => {
         try {
-            const { studentCode } = req.body;
+            const studentCode = req.params.studentCode;
+
             const student = await Students.findOne({ studentCode });
 
             if (!student) {
-                next({
+                return next({
                     status: 400,
-                    message: "Student code doesn't exsist."
+                    message: "Student doesn't exsist."
                 })
             }
 
             return res.status(200).json(student);
         } catch (error) {
-            next({
+            return next({
                 status: 500,
                 message: error
             })
@@ -28,7 +29,7 @@ const studentController = {
 
             return res.status(200).json(students);
         } catch (error) {
-            next({
+            return next({
                 status: 500,
                 message: error
             })
@@ -37,25 +38,26 @@ const studentController = {
 
     addStudent: async (req, res, next) => {
         try {
+            const { studentCode } = req.params;
             const studentInfo = req.body;
 
-            const check = await Students.findOne({ studentCode: studentInfo.studentCode });
+            const check = await Students.findOne({ studentCode });
 
             if (check) {
-                next({
+                return next({
                     status: 400,
-                    message: "Student code already exsists."
+                    message: "Student already exsists."
                 })
             }
 
-            const student = await Students.create({ ...studentInfo });
+            const student = await Students.create({ studentCode, ...studentInfo });
 
             return res.status(201).json({
-                message:"Create successfully!",
+                message: "Create successfully!",
                 student
             });
         } catch (error) {
-            next({
+            return next({
                 status: 500,
                 message: error
             })
@@ -64,23 +66,26 @@ const studentController = {
 
     updateByStudentCode: async (req, res, next) => {
         try {
+            const { studentCode } = req.params;
+
             const studentInfo = req.body;
+
             const student = await Students.findOneAndUpdate(
-                { 
-                    studentCode: studentInfo.studentCode 
+                {
+                    studentCode
                 },
                 {
                     ...studentInfo
                 },
-                { 
-                    new: true 
+                {
+                    new: true
                 }
             );
 
             if (!student) {
-                next({
+                return next({
                     status: 400,
-                    message: "Student code doesn't exsist."
+                    message: "Student doesn't exsist."
                 })
             }
 
@@ -88,8 +93,9 @@ const studentController = {
                 message: "Update successfully!",
                 student
             });
+
         } catch (error) {
-            next({
+            return next({
                 status: 500,
                 message: error
             })
@@ -97,13 +103,13 @@ const studentController = {
     },
     deleteByStudentCode: async (req, res, next) => {
         try {
-            const { studentCode } = req.body;
+            const {studentCode} = req.params;
             const student = await Students.findOneAndDelete({ studentCode });
 
             if (!student) {
-                next({
+                return next({
                     status: 400,
-                    message: "Student code doesn't exsist."
+                    message: "Student doesn't exsist."
                 })
             }
 
@@ -111,7 +117,7 @@ const studentController = {
                 message: "Delete successfully!"
             });
         } catch (error) {
-            next({
+            return next({
                 status: 500,
                 message: error
             })

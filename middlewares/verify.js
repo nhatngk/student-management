@@ -9,9 +9,9 @@ const decode = (req) => {
       if (bearerHeader) {
         const token = bearerHeader.split(" ")[1];
   
-        return jsonwebtoken.verify(
+        return jwt.verify(
           token,
-          process.env.SECRET_KEY
+          "SECRET_KEY"
         );
       }
   

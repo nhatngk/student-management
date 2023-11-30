@@ -10,7 +10,7 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    birthDay: {
+    birthday: {
         type: Date,
         required: true
     },

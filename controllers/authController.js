@@ -9,20 +9,20 @@ const authController = {
             const user = await Users.findOne({ username });
 
             if (!user) {
-                next({
+                return next({
                     status: 400,
                     message: "Username or password is incorrect!"
                 })
             }
 
             if (password !== user.password) {
-                next({
+                return next({
                     status: 400,
                     message: "Username or password is incorrect!"
                 })
             }
 
-            const token = jwt.sign({ userID: user._id }, "SECRET_KEY", { expiresIn: "1h" });
+            const token = jwt.sign({ userId: user._id }, "SECRET_KEY", { expiresIn: "1h" });
 
             return res.status(200).json({
                 message: "Login successfully!",
